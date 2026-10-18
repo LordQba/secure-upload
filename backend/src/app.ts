@@ -6,7 +6,6 @@ import { currentUser } from './user.js';
 import { router as vulnerableRouter } from './routes/vulnerable.js';
 import { router as secureRouter } from './routes/secure.js';
 
-// Foldery na pliki obu wersji (backend/uploads/ nie trafia do gita).
 mkdirSync('uploads/vulnerable', { recursive: true });
 mkdirSync('uploads/secure', { recursive: true });
 

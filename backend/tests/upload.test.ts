@@ -64,12 +64,9 @@ describe.each(['vulnerable', 'secure'] as const)('wersja %s', (version) => {
   });
 
   it('scenariusz 2: path traversal w nazwie pliku', async () => {
-    // supertest/form-data domyślnie robi basename() z nazwy pliku — używamy `filepath`, które go nie obcina,
-    // żeby realnie przetestować, czy backend sam chroni się przed traversal.
     const res = await request(app)
       .post(`${base}/upload`)
       .set('X-User', 'user1')
-      // @types/supertest nie zna opcji `filepath` (jest w form-data), stąd rzutowanie
       .attach('file', PLAIN_TEXT, { filepath: '../../pwned.txt' } as unknown as { filename: string });
 
     expect(res.status).toBe(201);
