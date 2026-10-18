@@ -7,27 +7,60 @@ Projekt P6: bezpieczne przesyłanie plików. Jedna aplikacja, dwie wersje upload
 - Node.js 20+ (testowane na 25)
 - MySQL 8
 
-## Uruchomienie
+## Uruchomienie krok po kroku
 
-1. **Baza.** Zaimportuj strukturę (tworzy bazę `secure_upload` i tabelę `files`):
-   ```
-   mysql -u root -p < schema.sql
-   ```
-2. **Backend** (`http://127.0.0.1:3000`):
-   ```
-   cd backend
-   cp .env.example .env    # uzupełnij DB_USER / DB_PASSWORD
-   npm install
-   npm run dev
-   ```
-3. **Frontend** (`http://localhost:5173`):
-   ```
-   cd frontend
-   npm install
-   npm run dev
-   ```
+### 1. Baza danych (MySQL)
 
-Sprawdzenie: `curl http://127.0.0.1:3000/api/health` powinno zwrócić `{"status":"ok","db":"ok"}`.
+Potrzebujesz działającego lokalnie serwera MySQL i użytkownika z prawem tworzenia baz (najprościej: `root`).
+
+Zaimportuj strukturę — polecenie samo tworzy bazę `secure_upload` i tabelę `files`:
+```
+mysql -u root -p < schema.sql
+```
+Zostaniesz zapytany o hasło roota. Jeśli root nie ma hasła, pomiń `-p`.
+
+Sprawdzenie, że baza istnieje:
+```
+mysql -u root -p -e "USE secure_upload; SHOW TABLES;"
+```
+Powinna pokazać się tabela `files`.
+
+### 2. Backend (`http://127.0.0.1:3000`)
+
+```
+cd backend
+cp .env.example .env
+npm install
+```
+Otwórz `backend/.env` i uzupełnij dane dostępowe do bazy (`DB_USER`, `DB_PASSWORD`) — reszta wartości domyślnych zwykle nie wymaga zmiany:
+```
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=<twoje hasło roota>
+DB_NAME=secure_upload
+MAX_FILE_SIZE_MB=5
+```
+
+Uruchomienie (najpierw odpala pełny zestaw testów z coverage — `predev` w `package.json` — dopiero potem startuje serwer; patrz [Testy i lint](#testy-i-lint)):
+```
+npm run dev
+```
+
+Sprawdzenie, że backend żyje i widzi bazę:
+```
+curl http://127.0.0.1:3000/api/health
+```
+Powinno zwrócić `{"status":"ok","db":"ok"}`. Jeśli `db` to `"error"` — sprawdź dane w `.env` i czy MySQL w ogóle działa.
+
+### 3. Frontend (`http://localhost:5173`)
+
+```
+cd frontend
+npm install
+npm run dev
+```
+Otwórz w przeglądarce adres, który wypisze Vite (domyślnie `http://localhost:5173`).
 
 ## Testy i lint
 
