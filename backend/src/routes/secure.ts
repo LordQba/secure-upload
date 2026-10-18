@@ -40,8 +40,6 @@ const SIGNATURES: { ext: string; mime: string; check: (buf: Buffer) => boolean }
     check: (b) => b[0] === 0x25 && b[1] === 0x50 && b[2] === 0x44 && b[3] === 0x46,
   },
   {
-    // zwykły tekst nie ma magic bytes — odrzucamy, jeśli zawiera znak null (binarny plik) albo zaczyna się od "<"
-    // (chroni przed plikiem .txt, który w rzeczywistości jest HTML-em/SVG-iem z XSS)
     ext: 'txt',
     mime: 'text/plain',
     check: (b) => !b.includes(0) && b.subarray(0, 256).toString('utf-8').trimStart()[0] !== '<',
@@ -76,7 +74,6 @@ router.post('/upload', upload.single('file'), async (req, res) => {
   // SECURE: losowa nazwa pliku na dysku — oryginalna nazwa (ewentualny path traversal) nigdy nie trafia do ścieżki.
   const storedName = `${randomUUID()}.${signature.ext}`;
   const path = `uploads/secure/${storedName}`;
-  // ścieżka jest w całości wygenerowana przez serwer (randomUUID), nie zawiera żadnego fragmentu od klienta
   // eslint-disable-next-line security/detect-non-literal-fs-filename
   await writeFile(path, file.buffer);
 
