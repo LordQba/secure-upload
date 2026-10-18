@@ -76,6 +76,8 @@ router.post('/upload', upload.single('file'), async (req, res) => {
   // SECURE: losowa nazwa pliku na dysku — oryginalna nazwa (ewentualny path traversal) nigdy nie trafia do ścieżki.
   const storedName = `${randomUUID()}.${signature.ext}`;
   const path = `uploads/secure/${storedName}`;
+  // ścieżka jest w całości wygenerowana przez serwer (randomUUID), nie zawiera żadnego fragmentu od klienta
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
   await writeFile(path, file.buffer);
 
   const owner = res.locals.user as string;

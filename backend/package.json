@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch --env-file-if-exists=.env src/server.ts"
+    "test": "node --env-file-if-exists=.env node_modules/jest/bin/jest.js --runInBand --forceExit",
+    "test:coverage": "node --env-file-if-exists=.env node_modules/jest/bin/jest.js --runInBand --forceExit --coverage",
+    "predev": "npm run test:coverage",
+    "dev": "tsx watch --env-file-if-exists=.env src/server.ts",
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "",
@@ -18,11 +21,22 @@
     "mysql2": "^3.24.6"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@swc/core": "^1.16.18",
+    "@swc/jest": "^0.2.39",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
     "@types/multer": "^2.3.0",
     "@types/node": "^26.6.5",
+    "@types/supertest": "^7.2.1",
+    "eslint": "^10.13.0",
+    "eslint-plugin-security": "^4.2.0",
+    "globals": "^17.13.0",
+    "jest": "^30.5.2",
+    "supertest": "^7.3.1",
     "tsx": "^4.23.15",
-    "typescript": "^7.0.2"
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.71.2"
   }
 }

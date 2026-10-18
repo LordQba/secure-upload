@@ -29,6 +29,15 @@ Projekt P6: bezpieczne przesyłanie plików. Jedna aplikacja, dwie wersje upload
 
 Sprawdzenie: `curl http://127.0.0.1:3000/api/health` powinno zwrócić `{"status":"ok","db":"ok"}`.
 
+## Testy i lint
+
+Wymaga działającej bazy (testy czyszczą tabelę `files` i foldery uploadu przed każdym testem).
+```
+cd backend
+npm test          # Jest + Supertest, obie wersje API, z coverage
+npm run lint       # ESLint + eslint-plugin-security
+```
+
 ## Konta testowe
 
 Bez prawdziwego logowania. Użytkownika wybiera nagłówek `X-User` (`user1` lub `user2`, domyślnie `user1`):
