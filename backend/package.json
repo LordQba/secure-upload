@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "node --env-file-if-exists=.env node_modules/jest/bin/jest.js --runInBand --forceExit",
+    "test:coverage": "node --env-file-if-exists=.env node_modules/jest/bin/jest.js --runInBand --forceExit --coverage",
+    "predev": "npm run test:coverage",
     "dev": "tsx watch --env-file-if-exists=.env src/server.ts",
     "lint": "eslint ."
   },
